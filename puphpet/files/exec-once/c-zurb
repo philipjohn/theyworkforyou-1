@@ -1,0 +1,6 @@
+#!/bin/bash
+
+gem install zurb-foundation
+gem install compass
+cd /data/twfy/www/docs/style
+compass compile
