@@ -12,9 +12,9 @@ notifications:
       - "irc.mysociety.org#activity"
     use_notice: true
     skip_join: true
-  
+
 env: TWFY_TEST_DB_HOST="127.0.0.1" TWFY_TEST_DB_USER="root" TWFY_TEST_DB_PASS="" TWFY_TEST_DB_NAME="twfy_test"
-  
+
 before_script:
  - mysql -e "create database IF NOT EXISTS twfy_test;" -uroot
  - mysql -u root twfy_test < db/schema.sql
@@ -23,8 +23,7 @@ before_script:
  - echo "short_open_tag = On" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 script:
- - mkdir -p build/logs
- - vendor/bin/phpunit
+ - vendor/bin/codeception run --coverage --xml
 
 after_script:
  - php vendor/bin/coveralls -v
