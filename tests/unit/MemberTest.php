@@ -23,7 +23,7 @@ class MemberTest extends PHPUnit_Extensions_Database_TestCase
      */
     public function getDataSet()
     {
-        return $this->createMySQLXMLDataSet(dirname(__FILE__).'/_fixtures/member.xml');
+        return $this->createMySQLXMLDataSet(dirname(__FILE__).'/../_fixtures/member.xml');
     }
 
     /**
@@ -122,7 +122,7 @@ class MemberTest extends PHPUnit_Extensions_Database_TestCase
 
         $this->assertEquals('http://' . DOMAIN . '/mp/2/test_current-mp/test_westminister_constituency', $MEMBER->url());
     }
-    
+
     /**
      * Test that MP URLs with special characters are generated correctly.
      *
