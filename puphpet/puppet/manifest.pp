@@ -569,7 +569,7 @@ define mysql_db (
 if has_key($mysql_values, 'phpmyadmin') and $mysql_values['phpmyadmin'] == 1 and is_hash($php_values) {
   if $::osfamily == 'debian' {
     if $::operatingsystem == 'ubuntu' {
-      apt::key { '80E7349A06ED541C': }
+      apt::key { '80E7349A06ED541C': key_server => 'hkp://keyserver.ubuntu.com:80' }
       apt::ppa { 'ppa:nijel/phpmyadmin': require => Apt::Key['80E7349A06ED541C'] }
     }
 
@@ -648,6 +648,79 @@ define mysql_nginx_default_conf (
   class { 'puphpet::nginx':
     fastcgi_pass => $fastcgi_pass,
     notify       => Class['nginx::service'],
+  }
+}
+
+## Begin MongoDb manifest
+
+if $mongodb_values == undef {
+  $mongodb_values = hiera('mongodb', false)
+}
+
+if $php_values == undef {
+  $php_values = hiera('php', false)
+}
+
+if $apache_values == undef {
+  $apache_values = hiera('apache', false)
+}
+
+if $nginx_values == undef {
+  $nginx_values = hiera('nginx', false)
+}
+
+if is_hash($apache_values) or is_hash($nginx_values) {
+  $mongodb_webserver_restart = true
+} else {
+  $mongodb_webserver_restart = false
+}
+
+if has_key($mongodb_values, 'install') and $mongodb_values['install'] == 1 {
+  case $::osfamily {
+    'debian': {
+      class {'::mongodb::globals':
+        manage_package_repo => true,
+      }->
+      class {'::mongodb::server':
+        auth => $mongodb_values['auth'],
+        port => $mongodb_values['port'],
+      }
+    }
+    'redhat': {
+      class {'::mongodb::globals':
+        manage_package_repo => true,
+      }->
+      class {'::mongodb::server':
+        auth => $mongodb_values['auth'],
+        port => $mongodb_values['port'],
+      }->
+      class {'::mongodb::client': }
+    }
+  }
+
+  if is_hash($mongodb_values['databases']) and count($mongodb_values['databases']) > 0 {
+    create_resources(mongodb_db, $mongodb_values['databases'])
+  }
+
+  if is_hash($php_values) and defined(Php::Pecl::Module['mongo']) == false {
+    php::pecl::module { 'mongo':
+      service_autorestart => $mariadb_webserver_restart,
+      require             => Class['::mongodb::server']
+    }
+  }
+}
+
+define mongodb_db (
+  $user,
+  $password
+) {
+  if $name == '' or $password == '' {
+    fail( 'MongoDB requires that name and password be set. Please check your settings!' )
+  }
+
+  mongodb::db { $name:
+    user     => $user,
+    password => $password
   }
 }
 

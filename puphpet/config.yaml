@@ -16,13 +16,14 @@ vagrantfile-local:
                     VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root: 1
         provision:
             puppet:
-                manifests_path: puphpet/puppet/manifests
+                manifests_path: puphpet/puppet
+                manifest_file: manifest.pp
                 options:
                     - '--verbose'
                     - '--hiera_config /vagrant/puphpet/puppet/hiera.yaml'
                     - '--parser future'
         synced_folder:
-            WD1dp2TtMIpp:
+            280cOlxI7qtF:
                 id: vagrant-root
                 source: ./
                 target: /data/twfy
@@ -39,7 +40,7 @@ vagrantfile-local:
         forward_x11: false
         shell: 'bash -l'
     vagrant:
-        host: ':detect'
+        host: detect
 server:
     packages:
         - memcached
@@ -65,7 +66,7 @@ apache:
         - php
         - rewrite
     vhosts:
-        LqczCSzVMEXM:
+        W6hLuNrwz7r2:
             servername: theyworkforyou.dev
             docroot: /data/twfy/www/docs
             port: '80'
@@ -114,7 +115,7 @@ mysql:
     phpmyadmin: 0
     adminer: 0
     databases:
-        yrUHbjAOEWal:
+        lcNoNHTwcIpq:
             grant:
                 - ALL
             name: twfy
@@ -122,6 +123,19 @@ mysql:
             user: twfy
             password: twfy
             sql_file: /data/twfy/db/schema.sql
+        AvVokpzGGdpR:
+            grant:
+                - ALL
+            name: twfy-test
+            host: localhost
+            user: twfy-test
+            password: twfy-test
+            sql_file: /data/twfy/db/schema.sql
+mongodb:
+    install: 0
+    auth: 1
+    port: '27017'
+    databases: {  }
 beanstalkd:
     install: 0
     listenaddress: 0.0.0.0
