@@ -28,3 +28,6 @@ script:
 
 after_script:
  - php vendor/bin/coveralls -v
+
+after_failure:
+ - cat tests/_log/*
