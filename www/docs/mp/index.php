@@ -402,6 +402,7 @@ if (isset($MEMBER) && is_array($MEMBER->person_id())) {
     $data['member_url'] = $MEMBER->url();
 
     $data['image'] = person_image($MEMBER);
+    $data['has_image'] = exists_rep_image($MEMBER->person_id());
     $data['member_summary'] = person_summary_description($MEMBER);
     $data['rebellion_rate'] = person_rebellion_rate($MEMBER);
     $data['recent_appearances'] = person_recent_appearances($MEMBER);

@@ -72,6 +72,19 @@
                 </div>
                 <div class="primary-content__unit">
 
+                    <?php if (!$has_image): ?>
+                    <div class="panel">
+                        <p>We&rsquo;re missing a photo of <?= $full_name ?>. If
+                            you have a photo <em>that you can release under a
+                            Creative Commons Attribution-ShareAlike license</em>
+                            or can locate a <em>copyright free</em> photo,
+                            <a href="mailto:<?= str_replace('@', '&#64;', CONTACTEMAIL) ?>">
+                            please email it to us</a>. Please do not email us
+                            about copyrighted photos elsewhere on the internet;
+                            we can&rsquo;t use them.</p>
+                    </div>
+                    <?php endif; ?>
+
                     <?php if ($party == 'Sinn Fein' && in_array(HOUSE_TYPE_COMMONS, $houses)): ?>
                     <div class="panel">
                         <p>Sinn F&eacute;in MPs do not take their seats in Parliament.</p>
